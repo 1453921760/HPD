@@ -43,9 +43,17 @@ zset = {'零食': 0, '茶酒': 1, '调料烘培': 2, '泡菜熟食': 3,
  '男上装': 26, '男裤装': 27, 
  '珠宝饰品': 28, '手表军刀': 29, '眼镜': 30, 
  '运动服装': 31, '运动健身': 32, '户外': 33}
+tmp = 0
+x = [0,4,3,3,4,7,2,2,1,2,3,3]
+for a,b in enumerate(x):
+    if a>=1:
+        tmp = x[a-1] + tmp
+        for i in range(b):
+            xb = tmp + i
+            for j in range(b):  
+                y[xb][tmp+j] = 9.0
 
-x = [4,3,3,4,7,2,2,1,2,3,3]
-for a in x :
-    for i in range(a):
+print((sum(x)))
+        
         
 
