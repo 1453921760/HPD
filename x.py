@@ -153,7 +153,3 @@ class Custom():
 
 
 
-a = Custom()
-a.feedBack("零食","茶酒")
-a.check()
-print(a.matrix)
