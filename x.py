@@ -130,20 +130,30 @@ class Custom():
 
                 self.zlist = [x for x in range(34)]                
 
-        def feedBack(self,searchName,choiceName):
-                pass
+        def feedBack(self,searchName,choiceName):                               #反馈函数，在用户点击被某个推荐吸引时，反馈使得下次该商品的推荐概率增加。
+                tmpList = self.matrix[self.zset[searchName]]
+                num = self.zset[choiceName]
+                self.matrix[self.zset[searchName]][num] = self.matrix[self.zset[searchName]][num] + 2.0 
+
         
 
         def recommend(self,searchName):             #推荐算法，给出商品名称返回一个按概率
-
                 tmpMatrix = np.asarray(self.matrix[self.zset[searchName]])        #获取给定名称的商品关联的矩阵
                 standardMatrix = tmpMatrix/np.sum(tmpMatrix)               #将关联矩阵归一化
                 num = [np.random.choice(self.zlist,p=standardMatrix.ravel()) for _ in range(3)]   #按概率选出三个关联性较大的商品种类
                 result = [list(self.zset)[x] for x in num]
                 return result
 
+        def check(self):                                                             #检查关联矩阵的某一行，如果大于1000，则除以1000，降低运算复杂度
+                tmpMatrix = np.asarray(self.matrix)
+                if(np.max(tmpMatrix)>1000):
+                        loc = np.where(tmpMatrix == np.max(tmpMatrix))[0][0]
+                        for i in range(len(tmpMatrix[0])):
+                                self.matrix[loc][i] = self.matrix[loc][i] / 1000.0
+
 
 
 a = Custom()
-for x in range(20):
-        print(a.recommend("文具"))
+a.feedBack("零食","茶酒")
+a.check()
+print(a.matrix)
