@@ -133,14 +133,14 @@ class Custom():
         def feedBack(self,searchName,choiceName,operation):                               #反馈函数，在用户点击被某个推荐吸引时，反馈使得下次该商品的推荐概率增加。
                 tmpList = self.matrix[self.zset[searchName]]
                 num = self.zset[choiceName]
-                if operation == "点击":
+                if operation == "click":
 
                         self.matrix[self.zset[searchName]][num] = self.matrix[self.zset[searchName]][num] + 2.0 
 
-                if operation == "加购物车" :
+                if operation == "add_buy_car" :
                         self.matrix[self.zset[searchName]][num] = self.matrix[self.zset[searchName]][num] + 5.0
 
-                if operation == "购买":
+                if operation == "buy":
                         self.matrix[self.zset[searchName]][num] = self.matrix[self.zset[searchName]][num] + 10.0 
  
 
