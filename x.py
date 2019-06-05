@@ -130,10 +130,20 @@ class Custom():
 
                 self.zlist = [x for x in range(34)]                
 
-        def feedBack(self,searchName,choiceName):                               #反馈函数，在用户点击被某个推荐吸引时，反馈使得下次该商品的推荐概率增加。
+        def feedBack(self,searchName,choiceName,operation):                               #反馈函数，在用户点击被某个推荐吸引时，反馈使得下次该商品的推荐概率增加。
                 tmpList = self.matrix[self.zset[searchName]]
                 num = self.zset[choiceName]
-                self.matrix[self.zset[searchName]][num] = self.matrix[self.zset[searchName]][num] + 2.0 
+                if operation == "点击":
+
+                        self.matrix[self.zset[searchName]][num] = self.matrix[self.zset[searchName]][num] + 2.0 
+
+                if operation == "加购物车" :
+                        self.matrix[self.zset[searchName]][num] = self.matrix[self.zset[searchName]][num] + 5.0
+
+                if operation == "购买":
+                        self.matrix[self.zset[searchName]][num] = self.matrix[self.zset[searchName]][num] + 10.0 
+ 
+
 
         
 
@@ -144,6 +154,16 @@ class Custom():
                 result = [list(self.zset)[x] for x in num]
                 return result
 
+        def static_reconmend(self):
+                tmpMatrix = np.asarray(self.matrix)
+                loc = np.where(tmpMatrix == np.max(tmpMatrix))[0][0]
+                standardMatrix = tmpMatrix[loc]/np.sum(tmpMatrix[loc])               #将关联矩阵归一化
+                num = [np.random.choice(self.zlist,p=standardMatrix.ravel()) for _ in range(3)]   #按概率选出三个关联性较大的商品种类
+                result = [list(self.zset)[x] for x in num]
+                return result
+
+
+
         def check(self):                                                             #检查关联矩阵的某一行，如果大于1000，则除以1000，降低运算复杂度
                 tmpMatrix = np.asarray(self.matrix)
                 if(np.max(tmpMatrix)>1000):
@@ -152,4 +172,8 @@ class Custom():
                                 self.matrix[loc][i] = self.matrix[loc][i] / 1000.0
 
 
-
+"""
+a = Custom()
+print(a.feedBack("零食","茶酒","购买"))
+print(a.matrix)
+print(a.static_reconmend())"""
